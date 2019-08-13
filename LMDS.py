@@ -35,7 +35,7 @@ def landmarkMDS_2D(parts, num_parts, distance_function, num_landmarks=3, plot=Fa
             d = distance_function(landmarkpart, parts(j))
             distMat[landmark,j] = d
             #determine whether min to landmarks is maximal so far
-            to_lm = np.min(distMat[landmarks,j])
+            to_lm = min([distMat[l,j] for l in landmarks])
             if (max_distance < to_lm) and (j not in landmarks):
                 max_distance = to_lm
                 argmax_distance = j
@@ -115,5 +115,4 @@ def landmarkMDS_2D(parts, num_parts, distance_function, num_landmarks=3, plot=Fa
         ax.scatter(xcoords, ycoords,color=colors)
         for i, txt in enumerate(landmarks):
             ax.annotate(txt, (xcoords[txt], ycoords[txt]))
-    l
     return xcoords, ycoords
