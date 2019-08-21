@@ -44,7 +44,11 @@ def landmarkMDS_2D(parts, num_parts, distance_function, num_landmarks=3, plot=Fa
         landmarks.append(landmark)
     #fill in distances for last landmark
     landmarkpart = parts(landmark)
+    if verbose:
+        print("\n Landmark #", num_landmarks-1)
     for j in range(num_parts):
+        if verbose:
+            print(j, end=" ")
         part = parts(j)
         d = distance_function(landmarkpart, parts(j))
         distMat[landmark,j] = d
@@ -54,7 +58,6 @@ def landmarkMDS_2D(parts, num_parts, distance_function, num_landmarks=3, plot=Fa
     for i, landi in enumerate(landmarks):
         for j, landj in enumerate(landmarks):
             lmdistMat[i,j] = distMat[landi, landj]
-    print(lmdistMat)
     n = len(landmarks)
     sqdistMat = np.multiply(lmdistMat, lmdistMat)
     H = -1/n*np.ones((n,n))
