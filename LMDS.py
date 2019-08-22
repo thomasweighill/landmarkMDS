@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import networkx as nx
 import numpy as np
 
-def landmarkMDS_2D(parts, num_parts, distance_function, num_landmarks=3, plot=False, verbose=False):
+def landmarkMDS_2D(parts, num_parts, distance_function, num_landmarks=3, plot=False, verbose=False, chooselandmarks=[]):
     '''
     Does landmark MDS with furthest point sampling.
 
@@ -17,8 +17,12 @@ def landmarkMDS_2D(parts, num_parts, distance_function, num_landmarks=3, plot=Fa
     :returns: x coordinates, y coordinates
     '''
     #generate landmarks
-    lm = np.random.choice(num_parts)
-    landmark = lm #first landmark point's index in parts
+    landmarks = chooselandmarks.copy()
+    if len(landmarks) == 0:
+        lm = np.random.choice(num_parts)
+        landmark = lm #first landmark point's index in parts
+    else:
+        landmark = chooselandmarks[0]
     landmarks = [landmark] #list of landmark indices
     distMat = np.zeros((num_parts, num_parts)) #incomplete distance matrix
     for index in range(num_landmarks-1):
@@ -40,7 +44,10 @@ def landmarkMDS_2D(parts, num_parts, distance_function, num_landmarks=3, plot=Fa
                 max_distance = to_lm
                 argmax_distance = j
         #next landmark is furthest from landmarks
-        landmark = argmax_distance
+        if len(landmarks) >= len(chooselandmarks):
+            landmark = argmax_distance
+        else:
+            landmark = chooselandmarks[len(landmarks)]
         landmarks.append(landmark)
     #fill in distances for last landmark
     landmarkpart = parts(landmark)
